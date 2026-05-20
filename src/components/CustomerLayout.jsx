@@ -91,7 +91,6 @@
 
 
 
-
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -161,21 +160,25 @@ const CustomerLayout = ({ children }) => {
       </main>
 
       {/* Bottom nav for mobile */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-40">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex items-center justify-around py-2">
+      <nav className="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-800 z-40 md:hidden">
+        <div className="w-full mx-auto px-1">
+          {/* Changed from flex to an explicit 6-column grid layout */}
+          <div className="grid grid-cols-6 items-center justify-items-center py-2 gap-0.5">
             {navItems.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition ${
+                  `flex flex-col items-center gap-0.5 py-1 w-full rounded-lg transition min-w-0 ${
                     isActive ? 'text-orange-400' : 'text-gray-500 hover:text-gray-300'
                   }`
                 }
               >
-                <FontAwesomeIcon icon={item.icon} className="text-lg" />
-                <span className="text-xs">{item.label}</span>
+                <FontAwesomeIcon icon={item.icon} className="text-base sm:text-lg" />
+                {/* Optimized tracking and added truncation boundaries */}
+                <span className="text-[10px] sm:text-xs font-medium truncate w-full text-center tracking-tight px-0.5 block">
+                  {item.label}
+                </span>
               </NavLink>
             ))}
           </div>
@@ -183,7 +186,7 @@ const CustomerLayout = ({ children }) => {
       </nav>
 
       {/* Bottom padding so content doesn't hide behind nav */}
-      <div className="h-20" />
+      <div className="h-20 md:hidden" />
     </div>
   );
 };
