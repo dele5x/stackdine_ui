@@ -104,6 +104,7 @@ import {
   faCalendarDays,
   faUser,
   faRightFromBracket,
+  faCreditCard,
 } from '@fortawesome/free-solid-svg-icons';
 
 const navItems = [
@@ -112,6 +113,7 @@ const navItems = [
   { label: 'My Orders',    path: '/customer/orders',       icon: faReceipt },
   { label: 'Reservations', path: '/customer/reservations', icon: faCalendarDays },
   { label: 'Profile',      path: '/customer/profile',      icon: faUser },
+  { label: 'Payments',     path: '/customer/payments',     icon: faCreditCard },
 ];
 
 const CustomerLayout = ({ children }) => {

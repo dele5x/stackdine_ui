@@ -146,6 +146,7 @@ import CustomerMenu from './pages/customer/Menu';
 import CustomerOrders from './pages/customer/Orders';
 import CustomerReservations from './pages/customer/Reservations';
 import CustomerProfile from './pages/customer/Profile';
+import CustomerPayments from './pages/customer/Payments';
  
 const ProtectedRoute = ({ children, roles }) => {
   const { user, loading } = useAuth();
@@ -212,6 +213,7 @@ const App = () => {
         <Route path="/customer/menu" element={<ProtectedRoute roles={['customer']}><CustomerMenu /></ProtectedRoute>} />
         <Route path="/customer/orders" element={<ProtectedRoute roles={['customer']}><CustomerOrders /></ProtectedRoute>} />
         <Route path="/customer/reservations" element={<ProtectedRoute roles={['customer']}><CustomerReservations /></ProtectedRoute>} />
+        <Route path="/customer/payments" element={<ProtectedRoute roles={['customer']}><CustomerPayments /></ProtectedRoute>} />
         <Route path="/customer/profile" element={<ProtectedRoute roles={['customer']}><CustomerProfile /></ProtectedRoute>} />
  
         {/* Catch all */}
