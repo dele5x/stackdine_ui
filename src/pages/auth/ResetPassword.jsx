@@ -10,10 +10,12 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
+  const [errorStatus, setErrorStatus] = useState(null);
  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setErrorStatus(null);
  
     if (form.password !== form.confirmPassword) {
       return setError('Passwords do not match');
@@ -31,6 +33,7 @@ const ResetPassword = () => {
       setTimeout(() => navigate('/login', { state: { passwordReset: true } }), 2000);
     } catch (err) {
       setError(err.response?.data?.message || 'Invalid or expired reset link. Please request a new one.');
+      setErrorStatus(err.response?.status || null);
     } finally {
       setLoading(false);
     }
@@ -71,7 +74,7 @@ const ResetPassword = () => {
             >
               {error}
               {/* If token is invalid, show link to request a new one */}
-              {err?.response?.status === 400 && (
+              {errorStatus === 400 && (
                 <Link
                   to="/forgot-password"
                   className="block mt-2 text-orange-400 hover:text-orange-300 underline"
