@@ -111,8 +111,9 @@ const navItems = [
   { label: 'Menu',         path: '/customer/menu',         icon: faUtensils },
   { label: 'My Orders',    path: '/customer/orders',       icon: faReceipt },
   { label: 'Reservations', path: '/customer/reservations', icon: faCalendarDays },
-  { label: 'Profile',      path: '/customer/profile',      icon: faUser },
   { label: 'Payments',     path: '/customer/payments',     icon: faCreditCard },
+  { label: 'Profile',      path: '/customer/profile',      icon: faUser },
+
 ];
 
 const CustomerLayout = ({ children }) => {
