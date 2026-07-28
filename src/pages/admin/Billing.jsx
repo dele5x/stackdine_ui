@@ -12,15 +12,17 @@ const statusColors = {
 
 const BillModal = ({ bill, onClose, onUpdated }) => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handlePayment = async () => {
     setLoading(true);
+    setError('');
     try {
       await API.patch(`/billing/${bill._id}/pay`);
       onUpdated();
       onClose();
     } catch (err) {
-      console.error(err);
+      setError(err.response?.data?.message || 'Payment failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -29,12 +31,13 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
   const handleRefund = async () => {
     if (!window.confirm('Refund this bill?')) return;
     setLoading(true);
+    setError('');
     try {
       await API.patch(`/billing/${bill._id}/refund`);
       onUpdated();
       onClose();
     } catch (err) {
-      console.error(err);
+      setError(err.response?.data?.message || 'Refund failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -52,6 +55,12 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
           <h3 className="text-white font-semibold text-lg">Bill Details</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-white">✕</button>
         </div>
+
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg mb-4 text-sm">
+            {error}
+          </div>
+        )}
 
         <div className="space-y-4">
           <div className="flex justify-between text-sm">
@@ -138,7 +147,7 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
 };
 
 // Added the bills prop here
-const GenerateBillModal = ({ onClose, onSaved, bills }) => {
+const GenerateBillModal = ({ onClose, onSaved, bills = [] }) => {
   const [orders, setOrders] = useState([]);
   const [form, setForm] = useState({
     orderId: '',
@@ -153,16 +162,16 @@ const GenerateBillModal = ({ onClose, onSaved, bills }) => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const { data } = await API.get('/orders?status=delivered');
+        const { data } = await API.get('/orders');
         
         // Extract the IDs of orders that have already been billed.
         const billedOrderIds = bills.map(bill => 
           bill.order?._id || bill.order || bill.orderId
         ).filter(Boolean);
 
-        // Keep only the orders that are NOT in the billed list
+        // Keep non-cancelled orders that are NOT in the billed list
         const unbilledOrders = data.data.filter(
-          (order) => !billedOrderIds.includes(order._id)
+          (order) => !billedOrderIds.includes(order._id) && order.status !== 'cancelled'
         );
 
         setOrders(unbilledOrders);
