@@ -32,6 +32,7 @@ const PaymentModal = ({ bill, onClose, onPaid }) => {
   ];
 
   const handleConfirm = async () => {
+    if (!bill?._id) return;
     setLoading(true);
     try {
       await API.patch(`/billing/${bill._id}/pay`, { paymentMethod: method });
@@ -67,7 +68,7 @@ const PaymentModal = ({ bill, onClose, onPaid }) => {
             <h3 className="text-white font-bold text-xl">Payment Confirmed!</h3>
             <p className="text-gray-400 text-sm mt-2">
               Your payment of <span className="text-orange-400 font-semibold">
-                ₦{bill.totalAmount?.toLocaleString()}
+                ₦{bill?.totalAmount?.toLocaleString()}
               </span> has been received.
             </p>
           </motion.div>
@@ -83,26 +84,26 @@ const PaymentModal = ({ bill, onClose, onPaid }) => {
             {/* Bill summary */}
             <div className="bg-gray-800 rounded-xl p-4 mb-6 space-y-2">
               <p className="text-gray-400 text-xs mb-3">BILL SUMMARY</p>
-              {bill.items?.map((item, i) => (
+              {bill?.items?.map((item, i) => (
                 <div key={i} className="flex justify-between text-sm">
                   <span className="text-gray-300">{item.name} x{item.quantity}</span>
                   <span className="text-white">₦{item.subtotal?.toLocaleString()}</span>
                 </div>
               ))}
               <div className="border-t border-gray-700 pt-2 space-y-1">
-                {bill.discount > 0 && (
+                {bill?.discount > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-400">Discount</span>
                     <span className="text-red-400">-{bill.discount}%</span>
                   </div>
                 )}
-                {bill.tax > 0 && (
+                {bill?.tax > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-400">Tax</span>
                     <span className="text-white">{bill.tax}%</span>
                   </div>
                 )}
-                {bill.tip > 0 && (
+                {bill?.tip > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-400">Tip</span>
                     <span className="text-white">₦{bill.tip?.toLocaleString()}</span>
@@ -309,18 +310,18 @@ const CustomerPayments = () => {
                       )}
                     </div>
                     <p className="text-gray-500 text-xs">
-                      {new Date(bill.createdAt).toLocaleString()}
+                      {bill?.createdAt ? new Date(bill.createdAt).toLocaleString() : ''}
                     </p>
                   </div>
 
                   <div className="text-right space-y-2">
                     <p className="text-orange-400 font-bold text-lg">
-                      ₦{bill.totalAmount?.toLocaleString()}
+                      ₦{bill?.totalAmount?.toLocaleString()}
                     </p>
-                    {bill.discount > 0 && (
+                    {bill?.discount > 0 && (
                       <p className="text-red-400 text-xs">-{bill.discount}% discount</p>
                     )}
-                    {bill.paymentStatus === 'pending' && (
+                    {bill?.paymentStatus === 'pending' && (
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -330,7 +331,7 @@ const CustomerPayments = () => {
                         Pay Now
                       </motion.button>
                     )}
-                    {bill.paymentStatus === 'paid' && bill.paidAt && (
+                    {bill?.paymentStatus === 'paid' && bill?.paidAt && (
                       <p className="text-green-400 text-xs">
                         Paid {new Date(bill.paidAt).toLocaleDateString()}
                       </p>

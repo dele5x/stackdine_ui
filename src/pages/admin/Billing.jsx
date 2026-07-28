@@ -15,6 +15,7 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
   const [error, setError] = useState('');
 
   const handlePayment = async () => {
+    if (!bill?._id) return;
     setLoading(true);
     setError('');
     try {
@@ -29,6 +30,7 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
   };
 
   const handleRefund = async () => {
+    if (!bill?._id) return;
     if (!window.confirm('Refund this bill?')) return;
     setLoading(true);
     setError('');
@@ -80,7 +82,7 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
 
           {/* Items */}
           <div className="border-t border-gray-800 pt-4 space-y-2">
-            {bill.items?.map((item, i) => (
+            {bill?.items?.map((item, i) => (
               <div key={i} className="flex justify-between text-sm">
                 <span className="text-gray-400">{item.name} x{item.quantity}</span>
                 <span className="text-white">₦{item.subtotal?.toLocaleString()}</span>
@@ -91,21 +93,21 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
           <div className="border-t border-gray-800 pt-4 space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-400">Subtotal</span>
-              <span className="text-white">₦{bill.subTotal?.toLocaleString()}</span>
+              <span className="text-white">₦{bill?.subTotal?.toLocaleString()}</span>
             </div>
-            {bill.discount > 0 && (
+            {bill?.discount > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Discount</span>
                 <span className="text-red-400">-{bill.discount}%</span>
               </div>
             )}
-            {bill.tax > 0 && (
+            {bill?.tax > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Tax</span>
                 <span className="text-white">{bill.tax}%</span>
               </div>
             )}
-            {bill.tip > 0 && (
+            {bill?.tip > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-gray-400">Tip</span>
                 <span className="text-white">₦{bill.tip?.toLocaleString()}</span>
@@ -114,12 +116,12 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
             <div className="flex justify-between text-sm font-bold pt-2 border-t border-gray-800">
               <span className="text-white">Total</span>
               <span className="text-orange-400 text-lg">
-                ₦{bill.totalAmount?.toLocaleString()}
+                ₦{bill?.totalAmount?.toLocaleString()}
               </span>
             </div>
           </div>
 
-          {bill.paymentStatus === 'pending' && (
+          {bill?.paymentStatus === 'pending' && (
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -131,7 +133,7 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
             </motion.button>
           )}
 
-          {bill.paymentStatus === 'paid' && (
+          {bill?.paymentStatus === 'paid' && (
             <button
               onClick={handleRefund}
               disabled={loading}
