@@ -53,7 +53,7 @@ const CustomerHome = () => {
           className="bg-gradient-to-r from-orange-500/20 to-orange-600/5 rounded-2xl p-6 border border-orange-500/20"
         >
           <h2 className="text-2xl font-bold text-white">
-            Welcome back, {user?.name?.split(' ')[0]}! 👋
+            Welcome back, {user?.name?.split(' ')[0]}! 
           </h2>
           <p className="text-gray-400 mt-1">
             What would you like to order today?

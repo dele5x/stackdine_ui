@@ -137,7 +137,8 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
   );
 };
 
-const GenerateBillModal = ({ onClose, onSaved }) => {
+// Added the bills prop here
+const GenerateBillModal = ({ onClose, onSaved, bills }) => {
   const [orders, setOrders] = useState([]);
   const [form, setForm] = useState({
     orderId: '',
@@ -153,13 +154,24 @@ const GenerateBillModal = ({ onClose, onSaved }) => {
     const fetchOrders = async () => {
       try {
         const { data } = await API.get('/orders?status=delivered');
-        setOrders(data.data);
+        
+        // Extract the IDs of orders that have already been billed.
+        const billedOrderIds = bills.map(bill => 
+          bill.order?._id || bill.order || bill.orderId
+        ).filter(Boolean);
+
+        // Keep only the orders that are NOT in the billed list
+        const unbilledOrders = data.data.filter(
+          (order) => !billedOrderIds.includes(order._id)
+        );
+
+        setOrders(unbilledOrders);
       } catch (err) {
         console.error(err);
       }
     };
     fetchOrders();
-  }, []);
+  }, [bills]); // Added bills to dependency array
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -441,6 +453,7 @@ const AdminBilling = () => {
             <GenerateBillModal
               onClose={() => setShowGenerate(false)}
               onSaved={fetchBills}
+              bills={bills} /* Added bills prop here */
             />
           )}
         </AnimatePresence>
