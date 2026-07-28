@@ -65,16 +65,16 @@ const BillModal = ({ bill, onClose, onUpdated }) => {
         <div className="space-y-4">
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Customer</span>
-            <span className="text-white">{bill.customer?.name}</span>
+            <span className="text-white">{bill?.customer?.name || 'Guest'}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Payment Method</span>
-            <span className="text-white capitalize">{bill.paymentMethod}</span>
+            <span className="text-white capitalize">{bill?.paymentMethod || 'cash'}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Status</span>
-            <span className={`px-2 py-0.5 rounded-full text-xs ${statusColors[bill.paymentStatus]}`}>
-              {bill.paymentStatus}
+            <span className={`px-2 py-0.5 rounded-full text-xs ${statusColors[bill?.paymentStatus || 'pending']}`}>
+              {bill?.paymentStatus}
             </span>
           </div>
 
@@ -423,7 +423,7 @@ const AdminBilling = () => {
                           ₦{bill.totalAmount?.toLocaleString()}
                         </td>
                         <td className="px-6 py-4 text-gray-400 text-sm capitalize">
-                          {bill.paymentMethod}
+                          {bill?.paymentMethod || 'cash'}
                         </td>
                         <td className="px-6 py-4">
                           <span className={`text-xs px-2 py-1 rounded-full ${statusColors[bill.paymentStatus]}`}>

@@ -289,11 +289,11 @@ const CustomerPayments = () => {
                 <div className="flex items-start justify-between">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className={`text-xs px-2 py-0.5 rounded-full border ${statusColors[bill.paymentStatus]}`}>
-                        {bill.paymentStatus}
+                      <span className={`text-xs px-2 py-0.5 rounded-full border ${statusColors[bill?.paymentStatus || 'pending']}`}>
+                        {bill?.paymentStatus}
                       </span>
                       <span className="text-gray-500 text-xs capitalize">
-                        {bill.paymentMethod}
+                        {bill?.paymentMethod || 'cash'}
                       </span>
                     </div>
                     <div className="space-y-1">
